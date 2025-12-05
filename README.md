@@ -1,4 +1,4 @@
-Here’s a playful yet professional dummy description for your GitHub project **OATM Simulator**—perfect for showcasing it in a hackathon or portfolio:
+Here’s a playful yet professional dummy description for your GitHub project **ATM Simulator**—perfect for showcasing it in a hackathon or portfolio:
 
 ---
 
