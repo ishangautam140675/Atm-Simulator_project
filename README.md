@@ -2,7 +2,7 @@ Here’s a playful yet professional dummy description for your GitHub project **
 
 ---
 
-### 🧠 OATM Simulator: Operational Architecture Test Module
+### 🧠 ATM Simulator: Operational Architecture Test Module
 
 **OATM Simulator** is a lightweight, modular simulation engine designed to emulate complex operational workflows across distributed systems. Whether you're stress-testing microservices, modeling real-time data pipelines, or simulating edge-case scenarios in cloud-native environments, OATM delivers a flexible sandbox for experimentation and validation.
 
