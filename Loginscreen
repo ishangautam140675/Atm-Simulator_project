@@ -1,0 +1,129 @@
+import React, { useState } from 'react';
+import { CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import { Label } from '@/components/ui/label';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import { LogIn, User, Lock } from 'lucide-react';
+
+export default function LoginScreen({ onLogin, message, messageType }) {
+    const [accountNumber, setAccountNumber] = useState('');
+    const [pin, setPin] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        if (!accountNumber.trim()) {
+            return;
+        }
+        
+        if (pin.length !== 4) {
+            return;
+        }
+
+        setIsLoading(true);
+        await onLogin(accountNumber.trim(), pin);
+        setIsLoading(false);
+    };
+
+    return (
+        <div>
+            <CardHeader className="text-center py-8 bg-gradient-to-b from-gray-50 to-white">
+                <div className="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4">
+                    <LogIn className="w-8 h-8 text-blue-600" />
+                </div>
+                <CardTitle className="text-2xl text-gray-800">Secure Login</CardTitle>
+                <p className="text-gray-600 mt-2">Enter your credentials to access your account</p>
+            </CardHeader>
+
+            <CardContent className="p-8 space-y-6">
+                {/* 
+                  Display Area Properties:
+                  - Font/Color/Size: Handled by Tailwind CSS classes via `messageType` state.
+                  - Behavior: Shows welcome, success (green), and error (red) messages.
+                */}
+                {message && (
+                    <Alert className={
+                        messageType === 'error' ? 'border-red-500 bg-red-50 text-red-700' :
+                        messageType === 'success' ? 'border-green-500 bg-green-50 text-green-700' :
+                        'border-blue-500 bg-blue-50 text-blue-700'
+                    }>
+                        <AlertDescription className="font-medium">
+                            {message}
+                        </AlertDescription>
+                    </Alert>
+                )}
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    {/*
+                      Input Field Properties (Account Number):
+                      - Label: "Account Number"
+                      - Input Type: text
+                      - Behavior: Standard text input
+                    */}
+                    <div className="space-y-2">
+                        <Label htmlFor="account" className="flex items-center gap-2 text-gray-700">
+                            <User className="w-4 h-4" />
+                            Account Number
+                        </Label>
+                        <Input
+                            id="account"
+                            type="text"
+                            value={accountNumber}
+                            onChange={(e) => setAccountNumber(e.target.value)}
+                            placeholder="Enter your account number"
+                            className="h-12 text-lg border-2 focus:border-blue-500"
+                            required
+                        />
+                    </div>
+
+                    {/*
+                      Input Field Properties (PIN):
+                      - Label: "4-Digit PIN"
+                      - Input Type: password (masks input)
+                      - Max Length: 4
+                      - Behavior: Only accepts 4 digits.
+                    */}
+                    <div className="space-y-2">
+                        <Label htmlFor="pin" className="flex items-center gap-2 text-gray-700">
+                            <Lock className="w-4 h-4" />
+                            4-Digit PIN
+                        </Label>
+                        <Input
+                            id="pin"
+                            type="password"
+                            value={pin}
+                            onChange={(e) => {
+                                const value = e.target.value.replace(/\D/g, '').slice(0, 4);
+                                setPin(value);
+                            }}
+                            placeholder="••••"
+                            className="h-12 text-lg text-center tracking-widest border-2 focus:border-blue-500"
+                            maxLength={4}
+                            required
+                        />
+                    </div>
+                    {/*
+                      Button Properties (Login):
+                      - Label: "Login"
+                      - State: Disabled until form is valid. Changes text when loading.
+                      - Behavior: Triggers `onLogin` authentication function.
+                      - Visual Feedback: Color changes on hover/focus, opacity change when disabled.
+                    */}
+                    <Button
+                        type="submit"
+                        className="w-full h-12 bg-blue-600 hover:bg-blue-700 text-lg font-semibold"
+                        disabled={isLoading || !accountNumber.trim() || pin.length !== 4}
+                    >
+                        {isLoading ? 'Authenticating...' : 'Login'}
+                    </Button>
+                </form>
+
+                <div className="text-center text-sm text-gray-500 mt-6">
+                    <p>Account will be locked after 3 failed attempts</p>
+                </div>
+            </CardContent>
+        </div>
+    );
+}
